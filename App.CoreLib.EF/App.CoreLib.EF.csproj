@@ -13,6 +13,7 @@
         <!-- <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance> -->
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/lethanhname/App.CoreLib</RepositoryUrl>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
