@@ -2,6 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <!-- NuGet settings -->
+        <PackageId>App.CoreLib.IntegrationTest</PackageId>
+        <PackageTags>ASP.NET Core Test</PackageTags>
+        <PackageReleaseNotes>https://github.com/lethanhname/App.CoreLib/blob/main/README.md</PackageReleaseNotes>
+        <PackageProjectUrl>https://github.com/lethanhname/App.CoreLib</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <!-- <PackageIcon>giraffe-64x64.png</PackageIcon> -->
+        <!-- <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance> -->
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/lethanhname/App.CoreLib</RepositoryUrl>
     </PropertyGroup>
     <ItemGroup>
       <Compile Remove="Security\**" />
