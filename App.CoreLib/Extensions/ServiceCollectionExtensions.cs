@@ -15,26 +15,23 @@ namespace App.CoreLib.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static void AddModules(this IServiceCollection services)
-        {
-            services.AddExtensions(false, new AssemblyProvider(services.BuildServiceProvider()));
-        }
-
-        public static void AddExtensions(this IServiceCollection services, bool includingSubpaths)
-        {
-            services.AddExtensions(includingSubpaths, new AssemblyProvider(services.BuildServiceProvider()));
-        }
-
-        public static void AddExtensions(this IServiceCollection services, IAssemblyProvider assemblyProvider)
-        {
-            services.AddExtensions(false, assemblyProvider);
-        }
-
-        public static void AddExtensions(this IServiceCollection services, bool includingSubpaths, IAssemblyProvider assemblyProvider)
+        public static void AddModules(this IServiceCollection services, bool isBundledWithHost = true, bool includingSubpaths = false)
         {
             services.AddHttpContextAccessor();
-            ServiceCollectionExtensions.DiscoverAssemblies(assemblyProvider, Globals.ExtensionsPath, includingSubpaths);
 
+            if (isBundledWithHost)
+            {
+                DiscoverAssemblies();
+            }
+            else
+            {
+                DiscoverAssemblies(new AssemblyProvider(services.BuildServiceProvider()), Globals.ExtensionsPath, includingSubpaths);
+            }
+            services.AddExtensions();
+        }
+
+        private static void AddExtensions(this IServiceCollection services)
+        {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ILogger logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger("CoreLib.WebApplication");
 
@@ -49,6 +46,18 @@ namespace App.CoreLib.Extensions
         private static void DiscoverAssemblies(IAssemblyProvider assemblyProvider, string extensionsPath, bool includingSubpaths)
         {
             ExtensionManager.SetAssemblies(assemblyProvider.GetAssemblies(extensionsPath, includingSubpaths));
+        }
+
+        private static void DiscoverAssemblies()
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+            var modules = ModuleConfigurationManager.GetModules();
+            foreach (var module in modules)
+            {
+                var assembly = Assembly.Load(new AssemblyName(module.Id));
+                assemblies.Add(assembly);
+            }
+            ExtensionManager.SetAssemblies(assemblies);
         }
     }
 }

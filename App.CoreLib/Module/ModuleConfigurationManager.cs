@@ -19,7 +19,6 @@ namespace App.CoreLib.Module
                 yield return new ModuleInfo
                 {
                     Id = module.id,
-                    IsBundledWithHost = module.isBundledWithHost
                 };
             }
         }
