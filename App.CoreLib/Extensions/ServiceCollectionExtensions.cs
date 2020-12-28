@@ -57,8 +57,8 @@ namespace App.CoreLib.Extensions
             var modules = ModuleConfigurationManager.GetModules();
             foreach (var module in modules)
             {
-                // var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(path, module.Id));
-                var assembly = Assembly.Load(new AssemblyName(module.Id));
+                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(path, module.Id));
+                // var assembly = Assembly.Load(new AssemblyName(module.Id));
                 assemblies.Add(assembly);
             }
             ExtensionManager.SetAssemblies(assemblies);
