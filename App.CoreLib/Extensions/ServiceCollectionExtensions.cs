@@ -32,6 +32,7 @@ namespace App.CoreLib.Extensions
             foreach (IModuleInitializer action in ExtensionManager.GetInstances<IModuleInitializer>())
             {
                 logger.LogInformation("Executing ConfigureServices action '{0}'", action.GetType().FullName);
+                Console.WriteLine("Executing ConfigureServices action '{0}'", action.GetType().FullName);
                 services.AddSingleton(typeof(IModuleInitializer), action);
                 action.ConfigureServices(services);
             }
