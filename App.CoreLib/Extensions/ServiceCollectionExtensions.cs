@@ -15,17 +15,12 @@ namespace App.CoreLib.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static void AddModules(this IServiceCollection services, bool isBundledWithHost = false, bool includingSubpaths = false)
+        public static void AddModules(this IServiceCollection services, bool includingSubpaths = false)
         {
             services.AddHttpContextAccessor();
-            if (isBundledWithHost)
-            {
-                DiscoverAssemblies(services);
-            }
-            else
-            {
-                DiscoverAssemblies(new AssemblyProvider(services.BuildServiceProvider()), Globals.ExtensionsPath, includingSubpaths);
-            }
+
+            DiscoverAssemblies(new AssemblyProvider(services.BuildServiceProvider()), Globals.ExtensionsPath, includingSubpaths);
+
             services.AddExtensions();
         }
 
@@ -45,23 +40,6 @@ namespace App.CoreLib.Extensions
         private static void DiscoverAssemblies(IAssemblyProvider assemblyProvider, string extensionsPath, bool includingSubpaths)
         {
             ExtensionManager.SetAssemblies(assemblyProvider.GetAssemblies(extensionsPath, includingSubpaths));
-        }
-
-        private static void DiscoverAssemblies(IServiceCollection services)
-        {
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
-            ILogger logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger("CoreLib.WebApplication");
-            logger.LogInformation(string.Format("Starting loading assemblies {0}", path));
-            List<Assembly> assemblies = new List<Assembly>();
-            var modules = ModuleConfigurationManager.GetModules();
-            foreach (var module in modules)
-            {
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(path, module.Id));
-                // var assembly = Assembly.Load(new AssemblyName(module.Id));
-                assemblies.Add(assembly);
-            }
-            ExtensionManager.SetAssemblies(assemblies);
         }
     }
 }
