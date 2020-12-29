@@ -15,32 +15,24 @@ namespace App.CoreLib.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static void AddModules(this IServiceCollection services)
-        {
-            services.AddExtensions(false, new AssemblyProvider(services.BuildServiceProvider()));
-        }
-
-        public static void AddExtensions(this IServiceCollection services, bool includingSubpaths)
-        {
-            services.AddExtensions(includingSubpaths, new AssemblyProvider(services.BuildServiceProvider()));
-        }
-
-        public static void AddExtensions(this IServiceCollection services, IAssemblyProvider assemblyProvider)
-        {
-            services.AddExtensions(false, assemblyProvider);
-        }
-
-        public static void AddExtensions(this IServiceCollection services, bool includingSubpaths, IAssemblyProvider assemblyProvider)
+        public static void AddModules(this IServiceCollection services, bool includingSubpaths = false)
         {
             services.AddHttpContextAccessor();
-            ServiceCollectionExtensions.DiscoverAssemblies(assemblyProvider, Globals.ExtensionsPath, includingSubpaths);
 
+            DiscoverAssemblies(new AssemblyProvider(services.BuildServiceProvider()), Globals.ExtensionsPath, includingSubpaths);
+
+            services.AddExtensions();
+        }
+
+        private static void AddExtensions(this IServiceCollection services)
+        {
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             ILogger logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger("CoreLib.WebApplication");
 
             foreach (IModuleInitializer action in ExtensionManager.GetInstances<IModuleInitializer>())
             {
                 logger.LogInformation("Executing ConfigureServices action '{0}'", action.GetType().FullName);
+                Console.WriteLine("Executing ConfigureServices action '{0}'", action.GetType().FullName);
                 services.AddSingleton(typeof(IModuleInitializer), action);
                 action.ConfigureServices(services);
             }

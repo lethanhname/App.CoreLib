@@ -23,7 +23,7 @@ namespace App.CoreLib
             ServerPath = serverPath;
         }
 
-        public static void SetRoot(string contentRootPath, string extensionsPath)
+        public static void SetRoot(string contentRootPath, string extensionsPath = "")
         {
             var basePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             ExtensionsPath = basePath + extensionsPath;

@@ -7,6 +7,10 @@ namespace App.CoreLib.EF.Events
 {
     public class EventEntity
     {
+        public EventEntity()
+        {
+            Messages = new List<EntityError>();
+        }
         public string EntityType { get; set; }
         public EntityState State { get; set; }
 

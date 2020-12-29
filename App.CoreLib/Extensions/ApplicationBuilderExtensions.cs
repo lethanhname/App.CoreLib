@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using App.CoreLib.Module;
+using System;
 
 namespace App.CoreLib.Extensions
 {
@@ -22,6 +23,7 @@ namespace App.CoreLib.Extensions
             {
                 var type = moduleInitializer.GetType();
                 logger.LogInformation("Executing Configure action '{0}'", type.FullName);
+                Console.WriteLine("Executing Configure action '{0}'", type.FullName);
                 moduleInitializer.Configure(applicationBuilder, env);
             }
         }
