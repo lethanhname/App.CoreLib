@@ -26,7 +26,7 @@ namespace App.CoreLib
         public static void SetRoot(string contentRootPath, string extensionsPath = "")
         {
             var basePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            ExtensionsPath = basePath + extensionsPath;
+            ExtensionsPath = extensionsPath;
             ContentRootPath = contentRootPath;
         }
 
